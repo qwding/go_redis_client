@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	host     *string = flag.String("host", "127.0.0.1:6937", "use your own redis host.default is localhost:6379")
+	host     *string = flag.String("host", "127.0.0.1:6379", "use your own redis host.default is localhost:6379")
 	db       *int    = flag.Int("db", 0, "select the db you want to act.default is 0.")
 	password *string = flag.String("password", "password", "give the redis password.default is password")
 	maxIdle  *int    = flag.Int("maxIdle", 50, "set max idle. default 50.")

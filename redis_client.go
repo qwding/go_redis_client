@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	// "github.com/garyburd/redigo/redis"
-	"redis_client/models"
+	"go_redis_client/models"
 	"strings"
 	// "encoding/json"
 	"reflect"
@@ -49,13 +49,18 @@ func showSelfCmd() {
 
 func main() {
 	for {
-		fmt.Println("please give the command. type help to see ourself command.")
+		fmt.Printf(">> ")
 
 		cmd := ReadLine()
-
-		if strings.TrimSpace(cmd) == "help" {
+		switch strings.TrimSpace(cmd) {
+		case "":
+			continue
+		case "help":
 			showSelfCmd()
 			continue
+		case "exit":
+		case "quit":
+			return
 		}
 
 		arr := strings.Split(cmd, " ")
@@ -73,7 +78,7 @@ func main() {
 				} else if length == 1 {
 					res, err = models.RedisOnlyCmd(arr[0])
 				} else if length == 2 {
-					res, err = models.RedisZeroArgs(arr[0], arr[1])
+					res, err = models.RedisRun(arr[0], arr[1])
 				} else {
 					switch arr[0] {
 					case "delkeys":
@@ -99,7 +104,7 @@ func main() {
 			if length == 1 {
 				res, err = models.RedisOnlyCmd(arr[0])
 			} else if length == 2 {
-				res, err = models.RedisZeroArgs(arr[0], arr[1])
+				res, err = models.RedisRun(arr[0], arr[1])
 			} else {
 				res, err = models.RedisRunArgs(arr[0], arr[1], arr[2:])
 			}
@@ -148,7 +153,7 @@ func (this *MyMethod) GetFunc(str string) (func(string, ...string) (interface{},
 
 func (this *MyMethod) Delkeys(key string, _ ...string) (interface{}, error) {
 	// method := "delkeys"
-	res, err := models.RedisZeroArgs("keys", key)
+	res, err := models.RedisRun("keys", key)
 	if err != nil {
 		return "delkeys error", err
 	}
@@ -159,7 +164,7 @@ func (this *MyMethod) Delkeys(key string, _ ...string) (interface{}, error) {
 			if str, ok := val.([]byte); ok {
 
 				delkey := string(str)
-				res, err := models.RedisZeroArgs("del", delkey)
+				res, err := models.RedisRun("del", delkey)
 				if err != nil {
 					return "delkeys errors", err
 				}
@@ -174,7 +179,7 @@ func (this *MyMethod) Delkeys(key string, _ ...string) (interface{}, error) {
 
 func (this *MyMethod) Setkeyskv(key string, arr ...string) (interface{}, error) {
 	method := "SetkeysKV"
-	res, err := models.RedisZeroArgs("keys", key)
+	res, err := models.RedisRun("keys", key)
 	if err != nil {
 		return "delkeys error", err
 	}

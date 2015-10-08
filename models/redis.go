@@ -84,20 +84,24 @@ func RedisRunArgs(action, key string, args []string) (interface{}, error) {
 	return RedisRun(action, key, interfaceArgs...)
 }
 
-func RedisRun(action, key string, args ...string) (interface{}, error) {
-	if len(args) != 2 {
+func RedisRun(action, key string, args ...interface{}) (interface{}, error) {
+	/*	if len(args) != 2 {
 		return nil, fmt.Errorf("wrong args.should 2,got %d.", len(args))
-	}
+	}*/
 
 	rc := RedisClient.Get()
 	defer rc.Close()
 
-	res, err := rc.Do(action, key, args...)
+	keyargs := make([]interface{}, len(args)+1)
+	keyargs[0] = key
+	copy(keyargs[1:], args)
+
+	res, err := rc.Do(action, keyargs...)
 	if err != nil {
 		for err != nil && err.Error() == "EOF" {
 			rc = RedisClient.Get()
 			defer rc.Close()
-			res, err = rc.Do(action, key, args...)
+			res, err = rc.Do(action, keyargs...)
 		}
 	}
 	return res, err

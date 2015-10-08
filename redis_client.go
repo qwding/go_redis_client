@@ -45,9 +45,11 @@ func ReadLine() string {
 
 func showSelfCmd() {
 	fmt.Printf("1. delkeys. delete multiply keys, use like 'delkeys 2015_sample_*'.\n")
+	fmt.Printf("2. Setkeyskv. hmset multiply hash keys with key and value, use like 'setkeykv 2015_sample_* mykey myvalue'.\n")
 }
 
 func main() {
+	fmt.Println("input redis command or self command,input help see detail.")
 	for {
 		fmt.Printf(">> ")
 
@@ -127,7 +129,7 @@ func main() {
 				}
 			}
 		} else {
-			fmt.Println("res is ", res)
+			fmt.Printf("res is \n %s", res)
 		}
 	}
 }
@@ -181,7 +183,7 @@ func (this *MyMethod) Setkeyskv(key string, arr ...string) (interface{}, error) 
 	method := "SetkeysKV"
 	res, err := models.RedisRun("keys", key)
 	if err != nil {
-		return "delkeys error", err
+		return "Setkeyskv error", err
 	}
 
 	if resArr, ok := res.([]interface{}); ok {
@@ -201,4 +203,21 @@ func (this *MyMethod) Setkeyskv(key string, arr ...string) (interface{}, error) 
 		return method + " failed", nil
 	}
 	return method + "success", nil
+}
+
+func (this *MyMethod) Getjson(key string, args ...string) (interface{}, error) {
+	method := "SetkeysKV"
+	if len(args) > 0 {
+		return method + " error", fmt.Errorf("this command has none args.")
+	}
+	res, err := models.RedisRun("get", key)
+	if err != nil {
+		return "GetJson error", err
+	}
+
+	if resArr, ok := res.([]byte); ok {
+		return string(resArr), nil
+	} else {
+		return method + " failed", nil
+	}
 }

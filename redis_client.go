@@ -1,5 +1,9 @@
 package main
 
+/**
+ * @author carlding
+ * @date : 2015-08
+ */
 import (
 	"flag"
 	"fmt"
@@ -46,6 +50,7 @@ func ReadLine() string {
 func showSelfCmd() {
 	fmt.Printf("1. delkeys. delete multiply keys, use like 'delkeys 2015_sample_*'.\n")
 	fmt.Printf("2. Setkeyskv. hmset multiply hash keys with key and value, use like 'setkeykv 2015_sample_* mykey myvalue'.\n")
+	fmt.Printf("3. getjson. if the key's value is json,use this command will print it string.\n")
 }
 
 func main() {
@@ -129,7 +134,7 @@ func main() {
 				}
 			}
 		} else {
-			fmt.Printf("res is \n %s", res)
+			fmt.Printf("res: \n %s \n", res)
 		}
 	}
 }

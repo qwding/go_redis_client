@@ -112,8 +112,10 @@ func main() {
 				res, err = models.RedisOnlyCmd(arr[0])
 			} else if length == 2 {
 				res, err = models.RedisRun(arr[0], arr[1])
+			} else if length == 3 {
+				res, err = models.RedisRun(arr[0], arr[1], arr[2])
 			} else {
-				res, err = models.RedisRunArgs(arr[0], arr[1], arr[2:])
+				res, err = models.RedisRun(arr[0], arr[1], arr[2:])
 			}
 		}
 		if err != nil {
@@ -124,7 +126,7 @@ func main() {
 			fmt.Println("len of res is ", len(resArr))
 			for j, val := range resArr {
 				if str, ok := val.([]byte); ok {
-					fmt.Println("res to string is :", j, string(str))
+					fmt.Println("res interface to string is :", j, string(str))
 				}
 				if strArr, ok := val.([]interface{}); ok {
 					for i, v := range strArr {
@@ -134,7 +136,12 @@ func main() {
 				}
 			}
 		} else {
-			fmt.Printf("res: \n %s \n", res)
+			if strByte, ok := res.([]byte); ok {
+				fmt.Println("res byte to string is :", string(strByte))
+			} else {
+				fmt.Println("res:")
+				fmt.Println(res)
+			}
 		}
 	}
 }
@@ -197,7 +204,7 @@ func (this *MyMethod) Setkeyskv(key string, arr ...string) (interface{}, error) 
 			if str, ok := val.([]byte); ok {
 
 				unitkey := string(str)
-				res, err := models.RedisRunArgs("hmset", unitkey, arr)
+				res, err := models.RedisRun("hmset", unitkey, arr)
 				if err != nil {
 					return method + "errors", err
 				}

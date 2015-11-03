@@ -71,19 +71,6 @@ func RedisOnlyCmd(action string) (interface{}, error) {
 	return res, err
 }
 
-func RedisRunArgs(action, key string, args []string) (interface{}, error) {
-	length := len(args)
-	if length%2 == 1 {
-		return nil, fmt.Errorf("please give key with value.")
-	}
-	// RedisClient.Do need []interface{} as the second param
-	interfaceArgs := make([]interface{}, 0, 8)
-	for _, arg := range args {
-		interfaceArgs = append(interfaceArgs, arg)
-	}
-	return RedisRun(action, key, interfaceArgs...)
-}
-
 func RedisRun(action, key string, args ...interface{}) (interface{}, error) {
 	/*	if len(args) != 2 {
 		return nil, fmt.Errorf("wrong args.should 2,got %d.", len(args))

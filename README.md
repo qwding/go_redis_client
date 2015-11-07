@@ -17,7 +17,7 @@
 
 ### 增加了自己添加的新功能，
 * `delkeys 2015_08_27_*`群删键值  删除所有 2015_08_27_ 开头的键值
-* `hsetkeyskv 2015_08_27_* key value` 群更改键值  将所有 2015_08_27_ 开头的hash键对应的key值更改（添加）为value。支持多key，value。（操作由hmset实现）
+* `setkeyskv 2015_08_27_* key value` 群更改键值  将所有 2015_08_27_ 开头的hash键对应的key值更改（添加）为value。支持多key，value。（操作由hmset实现）
 * `getjson key`获取json形式存储的key
 * 待增加...
 
